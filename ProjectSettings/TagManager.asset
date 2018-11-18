@@ -41,6 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: floor
+    uniqueID: 1068605437
+    locked: 0
+  - name: walls
+    uniqueID: 2243054485
+    locked: 0
+  - name: features
+    uniqueID: 1982108749
+    locked: 0
   - name: entities
     uniqueID: 235363513
+    locked: 0
+  - name: decals
+    uniqueID: 4124292925
     locked: 0
