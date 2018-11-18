@@ -47,7 +47,17 @@ public class player : MonoBehaviour {
         Animator.SetFloat("speed", Mathf.Abs(movementX) + Mathf.Abs(movementY));
         transform.Translate(delta * (Time.deltaTime + PlayerSpeed));
     }
-
+    private void Rotate(float movementX)
+    {
+        if (movementX > 0)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else if (movementX < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+    }
     private void Roll(bool rollingClick)
     {
         if (rollingClick)
@@ -67,16 +77,5 @@ public class player : MonoBehaviour {
             }
         }
     }
-
-    private void Rotate(float movementX)
-    {
-        if (movementX > 0)
-        {
-            transform.localScale = Vector3.one;
-        }
-        else if (movementX < 0)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-    }
+    
 }
