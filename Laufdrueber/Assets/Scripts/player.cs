@@ -2,80 +2,58 @@
 
 public class player : MonoBehaviour {
 
-    private delegate void OnRollingEnded();
-    private static event OnRollingEnded onRollingEnded;
-    private delegate void OnRollingStarted();
-    private static event OnRollingStarted onRollingStarted;
-
     private Vector3 _deltaMovement;
-    private float rollingTime;
+    private LookDirection _direction;
 
     public float PlayerSpeed = 0.005f;
     public Animator Animator;
 
     void Start()
     {
-        onRollingEnded += RollingEnded;
-        onRollingStarted += RollingStarted;
-    }
-
-    private void RollingStarted()
-    {
-        Animator.SetBool("isRolling", true);
-        rollingTime = Time.deltaTime;
-    }
-
-    private void RollingEnded()
-    {
-        Animator.SetBool("isRolling", false);
-        rollingTime = Time.deltaTime;
+        _direction = LookDirection.Right;
     }
 
     void FixedUpdate () {
         var movementX = Input.GetAxisRaw("Horizontal");
         var movementY = Input.GetAxisRaw("Vertical");
-        var rollingClick = Input.GetMouseButton(1);
 
-        Rotate(movementX);
-        Roll(rollingClick);
-        Move(movementX, movementY);
-    }
+        var mousePosition = Input.mousePosition;
+        var playerPos = Camera.main.WorldToScreenPoint(transform.position);
 
-    private void Move(float movementX, float movementY)
-    {
-        var delta = new Vector3(movementX, movementY, 0);
-        Animator.SetFloat("speed", Mathf.Abs(movementX) + Mathf.Abs(movementY));
+        // Rotate
+        if (mousePosition.x >= playerPos.x && _direction == LookDirection.Left)
+        {
+            transform.Rotate(0, 180, 0);
+            _direction = LookDirection.Right;
+        }
+        else if (mousePosition.x < playerPos.x && _direction == LookDirection.Right)
+        {
+            transform.Rotate(0, 180, 0);
+            _direction = LookDirection.Left;
+        }
+
+        // Animation
+        var deltaMovement = Mathf.Abs(movementX) + Mathf.Abs(movementY);
+        Animator.SetFloat("speed", deltaMovement);
+
+        // Move
+
+        Vector3 delta;
+        if (_direction == LookDirection.Left)
+        {
+            delta = new Vector3(-movementX, movementY, 0);
+        }
+        else
+        {
+            delta = new Vector3(movementX, movementY, 0);
+        }
+
         transform.Translate(delta * (Time.deltaTime + PlayerSpeed));
     }
-    private void Rotate(float movementX)
-    {
-        if (movementX > 0)
-        {
-            transform.localScale = Vector3.one;
-        }
-        else if (movementX < 0)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-    }
-    private void Roll(bool rollingClick)
-    {
-        if (rollingClick)
-        {
-            onRollingStarted();
-        }
 
-        if (rollingTime > 0)
-        {
-            if (rollingTime >= .5f)
-            {
-                onRollingEnded();
-            }
-            else
-            {
-                rollingTime += Time.deltaTime;
-            }
-        }
+    private enum LookDirection
+    {
+        Left,
+        Right
     }
-    
 }
