@@ -8,7 +8,24 @@ public class cameraMotor : MonoBehaviour {
 
     private void LateUpdate()
     {
-        var delta = Vector3.zero;
+        // Camera zoom level
+        if (Input.GetAxis("Mouse ScrollWheel") < 0) // zoom out
+        {
+            if (Camera.main.orthographicSize <= 2f)
+            {
+                Camera.main.orthographicSize += .1f;
+            }
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") > 0) // zoom in
+        {
+            if (Camera.main.orthographicSize >= .5f)
+            {
+                Camera.main.orthographicSize -= .1f;
+            }
+        }
+
+
+    var delta = Vector3.zero;
         var deltaX = EntityToFollow.position.x - transform.position.x;
         var deltaY = EntityToFollow.position.y - transform.position.y;
 
