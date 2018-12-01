@@ -37,7 +37,6 @@ public class player : MonoBehaviour {
         Animator.SetFloat("speed", deltaMovement);
 
         // Move
-
         Vector3 delta;
         if (_direction == LookDirection.Left)
         {
